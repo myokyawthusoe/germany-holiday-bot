@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +7,37 @@
 </head>
 <body>
     <div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: auto;">
-        <h2>🇩🇪 Germany ပိတ်ရက် (Telegram)</h2>
+        <h2>🇩🇪 Germany Public Holiday Reminder</h2>
         
         <form id="reminderForm">
-            <label>သင့်ပြည်နယ်ကို ရွေးပါ:</label><br>
+            <label>Select your State:</label><br>
             <select id="state" style="width: 100%; padding: 8px; margin: 10px 0;">
-                <option value="BY">Bayern (ဗိုင်ယာမ္ပ)</option>
                 <option value="BW">Baden-Württemberg</option>
+                <option value="BY">Bayern</option>
                 <option value="BE">Berlin</option>
+                <option value="BB">Brandenburg</option>
+                <option value="HB">Bremen</option>
+                <option value="HH">Hamburg</option>
                 <option value="HE">Hessen</option>
-                <!-- အခြားပြည်နယ်များ ဆက်ထည့်နိုင်ပါသည် -->
+                <option value="MV">Mecklenburg-Vorpommern</option>
+                <option value="NI">Niedersachsen</option>
+                <option value="NW">Nordrhein-Westfalen</option>
+                <option value="RP">Rheinland-Pfalz</option>
+                <option value="SL">Saarland</option>
+                <option value="SN">Sachsen</option>
+                <option value="ST">Sachsen-Anhalt</option>
+                <option value="SH">Schleswig-Holstein</option>
+                <option value="TH">Thüringen</option>
             </select>
             <br>
             
-            <label>Telegram Chat ID ထည့်ပါ:</label><br>
-            <small style="color: gray;">(Chat ID သိရန် Telegram တွင် @userinfobot သို့ သွားပါ)</small>
-            <input type="text" id="chatId" placeholder="ဥပမာ - 123456789" required style="width: 100%; padding: 8px; margin: 10px 0;">
+            <label>Telegram Chat ID:</label><br>
+            <small style="color: gray;">(To find your Chat ID, go to Telegram and search for @userinfobot)</small>
+            <input type="text" id="chatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 8px; margin: 10px 0;">
             <br>
             
             <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                ချိတ်ဆက်မည်
+                Save Reminder
             </button>
         </form>
         <p id="statusMsg" style="margin-top: 15px; color: green;"></p>
@@ -46,9 +57,9 @@
 
             const result = await response.json();
             if(result.success) {
-                document.getElementById('statusMsg').innerText = 'အောင်မြင်စွာ ချိတ်ဆက်ပြီးပါပြီ!';
+                document.getElementById('statusMsg').innerText = 'Successfully connected!';
             } else {
-                document.getElementById('statusMsg').innerText = 'အမှားအယွင်း ရှိနေပါသည်။';
+                document.getElementById('statusMsg').innerText = 'An error occurred.';
                 document.getElementById('statusMsg').style.color = 'red';
             }
         });
