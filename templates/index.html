@@ -6,12 +6,13 @@
     <title>Germany Holiday Telegram Reminder</title>
 </head>
 <body>
-    <div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: auto;">
+    <div style="padding: 20px; font-family: sans-serif; max-width: 600px; margin: auto;">
         <h2>🇩🇪 Germany Public Holiday Reminder</h2>
         
         <form id="reminderForm">
             <label>Select your State:</label><br>
-            <select id="state" style="width: 100%; padding: 8px; margin: 10px 0;">
+            <select id="state" required style="width: 100%; padding: 8px; margin: 10px 0;">
+                <option value="" disabled selected>Please Select your State</option>
                 <option value="BW">Baden-Württemberg</option>
                 <option value="BY">Bayern</option>
                 <option value="BE">Berlin</option>
