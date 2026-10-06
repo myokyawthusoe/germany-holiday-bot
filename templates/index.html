@@ -6,12 +6,12 @@
     <title>Germany Holiday Telegram Reminder</title>
 </head>
 <body>
-    <div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: auto;">
-        <h2 style="font-size: 18px; white-space: nowrap;">🇩🇪 Germany Holiday Telegram Reminder</h2>
+    <div style="padding: 20px; font-family: sans-serif; max-width: 450px; margin: auto; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <h2 style="font-size: 18px; white-space: nowrap; text-align: center; color: #333;">🇩🇪 Germany Holiday Telegram Reminder</h2>
         
         <form id="reminderForm">
-            <label>Select your State:</label><br>
-            <select id="state" required style="width: 100%; padding: 8px; margin: 10px 0;">
+            <label style="font-weight: bold;">Select your State:</label><br>
+            <select id="state" required style="width: 100%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 4px;">
                 <option value="" disabled selected>Please Select your State</option>
                 <option value="BW">Baden-Württemberg</option>
                 <option value="BY">Bayern</option>
@@ -30,22 +30,27 @@
                 <option value="SH">Schleswig-Holstein</option>
                 <option value="TH">Thüringen</option>
             </select>
-            <br>
             
-            <label>Telegram Chat ID:</label><br>
-            <small style="color: gray;">(To find your Chat ID, go to Telegram and search for @userinfobot)</small>
-            <input type="text" id="chatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 8px; margin: 10px 0;">
-            <br>
+            <label style="font-weight: bold;">Telegram Chat ID:</label><br>
+            <!-- Chat ID ရှာရမည့် ရှင်းလင်းချက် လမ်းညွှန်စာ -->
+            <div style="background: #eef2f5; padding: 10px; border-radius: 5px; font-size: 13px; color: #444; margin: 5px 0 10px 0; line-height: 1.4;">
+                📌 <b>Chat ID ဘယ်လိုရှာရမလဲ?</b><br>
+                1. Telegram ထဲတွင် <b>@userinfobot</b> ကို ရှာပြီး ဝင်ပါ။<br>
+                2. <b>/start</b> ဟု ပို့ပါ။<br>
+                3. Bot က ပြန်ပေးမည့် <b>Id:</b> နံပါတ် (ဥပမာ: <code>123456789</code>) ကို အောက်ပါကွက်လပ်တွင် ထည့်ပါ။
+            </div>
             
-            <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">
+            <input type="text" id="chatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            
+            <button type="submit" style="width: 100%; padding: 12px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 10px;">
                 Save Reminder
             </button>
             
-            <button type="button" id="unsubBtn" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <button type="button" id="unsubBtn" style="width: 100%; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
                 Unsubscribe
             </button>
         </form>
-        <p id="statusMsg" style="margin-top: 15px; font-weight: bold;"></p>
+        <p id="statusMsg" style="margin-top: 15px; font-weight: bold; text-align: center;"></p>
     </div>
 
     <script>
