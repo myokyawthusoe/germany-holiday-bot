@@ -27,6 +27,13 @@ def save_user(data):
     json.dump(users, f)
 
 
+def remove_user(chat_id):
+  users = load_users()
+  users = [u for u in users if u["chatId"] != str(chat_id)]
+  with open(DB_FILE, "w") as f:
+    json.dump(users, f)
+
+
 @app.route("/")
 def index():
   return render_template("index.html")
@@ -37,6 +44,16 @@ def save():
   data = request.json
   save_user(data)
   return jsonify({"success": True})
+
+
+@app.route("/unsubscribe", methods=["POST"])
+def unsubscribe():
+  data = request.json
+  chat_id = data.get("chatId")
+  if chat_id:
+    remove_user(chat_id)
+    return jsonify({"success": True})
+  return jsonify({"success": False, "error": "Invalid Chat ID"})
 
 
 def check_holidays_and_notify():
@@ -59,9 +76,13 @@ def check_holidays_and_notify():
         holidays = response.json()
         for holiday_name, data in holidays.items():
           if data["datum"] == tomorrow_str:
+            # မြန်မာလိုရော အင်္ဂလိပ်လိုပါ နှစ်ဘာသာစလုံး ပါဝင်သော စာသား
             message = (
-                f"⚠️ *မနက်ဖြန် ပိတ်ရက်နော်!* ({holiday_name})\n"
-                "အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ ဝယ်ထားဦးနော်။"
+                f"⚠️ *မနက်ဖြန် ပိတ်ရက်ပါ! / Tomorrow is a public holiday!*\n"
+                f"🎉 *Holiday:* {holiday_name}\n\n"
+                "🇲🇲 အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ ဝယ်ထားဦးနော်။\n"
+                "🇬🇧 Everything will be closed, so please buy what you need"
+                " in advance."
             )
             telegram_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
             requests.post(
@@ -77,9 +98,10 @@ def check_holidays_and_notify():
       print(f"Error for user {chat_id}: {e}")
 
 
+# ညနေ ၄ နာရီ (16:00) တွင် စစ်ဆေးမည်
 scheduler = BackgroundScheduler()
 scheduler.add_job(
-    func=check_holidays_and_notify, trigger="cron", hour=18, minute=0
+    func=check_holidays_and_notify, trigger="cron", hour=16, minute=0
 )
 scheduler.start()
 
