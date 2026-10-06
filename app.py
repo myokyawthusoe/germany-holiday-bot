@@ -2,13 +2,12 @@ import datetime
 import json
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 import requests
 
 app = Flask(__name__)
 
-# Telegram Bot အချက်အလက်များ (သင့် Bot Token ထည့်ရန်)
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"  # သင့် Bot Token ထည့်ရန်
 DB_FILE = "users.json"
 
 
@@ -30,7 +29,7 @@ def save_user(data):
 
 @app.route("/")
 def index():
-  return app.send_static_file("index.html")
+  return render_template("index.html")
 
 
 @app.route("/save", methods=["POST"])
