@@ -62,7 +62,7 @@ def unsubscribe():
 def send_test_message(chat_id, state):
   message = (
                 f"⚠️ *မနက်ဖြန် ပိတ်ရက်ပါ! / Tomorrow is a public holiday!*\n"
-                f"🎉 *Holiday:* {holiday_name}\n\n"
+                f"🎉 *Holiday:*\n\n"
                 "🇲🇲 အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ ဝယ်ထားဦးနော်။\n"
                 "🇬🇧 Everything will be closed, so please buy what you need"
                 " in advance."
