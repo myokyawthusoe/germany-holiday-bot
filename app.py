@@ -7,7 +7,7 @@ import requests
 
 app = Flask(__name__)
 
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"  # သင့် Bot Token ထည့်ရန်
+TOKEN = "8936278623:AAHxIYiSUQBMKlTOb2fiG2VcV20q0DT50kw"  # Bot Token ထည့်ရန်
 DB_FILE = "users.json"
 
 
