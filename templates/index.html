@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Germany Holiday Telegram Reminder</title>
+</head>
+<body>
+    <div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: auto;">
+        <h2>🇩🇪 Germany ပိတ်ရက် (Telegram)</h2>
+        
+        <form id="reminderForm">
+            <label>သင့်ပြည်နယ်ကို ရွေးပါ:</label><br>
+            <select id="state" style="width: 100%; padding: 8px; margin: 10px 0;">
+                <option value="BY">Bayern (ဗိုင်ယာမ္ပ)</option>
+                <option value="BW">Baden-Württemberg</option>
+                <option value="BE">Berlin</option>
+                <option value="HE">Hessen</option>
+                <!-- အခြားပြည်နယ်များ ဆက်ထည့်နိုင်ပါသည် -->
+            </select>
+            <br>
+            
+            <label>Telegram Chat ID ထည့်ပါ:</label><br>
+            <small style="color: gray;">(Chat ID သိရန် Telegram တွင် @userinfobot သို့ သွားပါ)</small>
+            <input type="text" id="chatId" placeholder="ဥပမာ - 123456789" required style="width: 100%; padding: 8px; margin: 10px 0;">
+            <br>
+            
+            <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                ချိတ်ဆက်မည်
+            </button>
+        </form>
+        <p id="statusMsg" style="margin-top: 15px; color: green;"></p>
+    </div>
+
+    <script>
+        document.getElementById('reminderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const state = document.getElementById('state').value;
+            const chatId = document.getElementById('chatId').value;
+
+            const response = await fetch('/save', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ state, chatId })
+            });
+
+            const result = await response.json();
+            if(result.success) {
+                document.getElementById('statusMsg').innerText = 'အောင်မြင်စွာ ချိတ်ဆက်ပြီးပါပြီ!';
+            } else {
+                document.getElementById('statusMsg').innerText = 'အမှားအယွင်း ရှိနေပါသည်။';
+                document.getElementById('statusMsg').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
