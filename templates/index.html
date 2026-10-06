@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Germany Holiday Telegram Reminder</title>
+    <title>Germany Holiday & Appointment Reminder</title>
 </head>
 <body>
     <div style="padding: 20px; font-family: sans-serif; max-width: 450px; margin: auto; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <h2 style="font-size: 18px; white-space: nowrap; text-align: center; color: #333;">🇩🇪 Germany Holiday Telegram Reminder</h2>
+        <h2 style="font-size: 18px; text-align: center; color: #333;">🇩🇪 Holiday & Appointment Reminder</h2>
         
-        <form id="reminderForm">
+        <!-- Holiday Reminder Section -->
+        <form id="holidayForm" style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+            <h3 style="font-size: 15px; color: #0088cc;">1. Holiday Reminder (State-based)</h3>
             <label style="font-weight: bold;">Select your State:</label><br>
-            <select id="state" required style="width: 100%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 4px;">
+            <select id="state" required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px;">
                 <option value="" disabled selected>Please Select your State</option>
                 <option value="BW">Baden-Württemberg</option>
                 <option value="BY">Bayern</option>
@@ -32,76 +34,106 @@
             </select>
             
             <label style="font-weight: bold;">Telegram Chat ID:</label><br>
-            <!-- Chat ID ရှာရမည့် ရှင်းလင်းချက် လမ်းညွှန်စာ -->
-            <div style="background: #eef2f5; padding: 10px; border-radius: 5px; font-size: 13px; color: #444; margin: 5px 0 10px 0; line-height: 1.4;">
-                📌 <b>Chat ID ဘယ်လိုရှာရမလဲ?</b><br>
-                1. Telegram ထဲတွင် <b>@userinfobot</b> ကို ရှာပြီး ဝင်ပါ။<br>
-                2. <b>/start</b> ဟု ပို့ပါ။<br>
-                3. Bot က ပြန်ပေးမည့် <b>Id:</b> နံပါတ် (ဥပမာ: <code>123456789</code>) ကို အောက်ပါကွက်လပ်တွင် ထည့်ပါ။
+            <div style="background: #eef2f5; padding: 8px; border-radius: 4px; font-size: 12px; color: #444; margin: 5px 0 8px 0;">
+                📌 Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော <b>Id:</b> နံပါတ်ကို ထည့်ပါ။
             </div>
+            <input type="text" id="holidayChatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             
-            <input type="text" id="chatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-            
-            <button type="submit" style="width: 100%; padding: 12px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 10px;">
-                Save Reminder
-            </button>
-            
-            <button type="button" id="unsubBtn" style="width: 100%; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-                Unsubscribe
+            <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                Save Holiday Reminder
             </button>
         </form>
+
+        <!-- Appointment Reminder Section -->
+        <form id="appointmentForm">
+            <h3 style="font-size: 15px; color: #28a745;">2. Custom Appointment Reminder</h3>
+            
+            <label style="font-weight: bold;">Telegram Chat ID:</label><br>
+            <input type="text" id="apptChatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+            <label style="font-weight: bold;">Appointment Date (ရက်စွဲ):</label><br>
+            <input type="date" id="apptDate" required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+            <label style="font-weight: bold;">Appointment Time (၂၄ နာရီပုံစံ အချိန်):</label><br>
+            <select id="apptTime" required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="" disabled selected>Select Time</option>
+                <!-- 24 Hours Dropdown Options -->
+                <script>
+                    for (let h = 0; h < 24; h++) {
+                        for (let m = 0; m < 60; m += 30) {
+                            let hh = String(h).padStart(2, '0');
+                            let mm = String(m).padStart(2, '0');
+                            document.write(`<option value="${hh}:${mm}">${hh}:${mm}</option>`);
+                        }
+                    }
+                </script>
+            </select>
+
+            <label style="font-weight: bold;">Appointment Detail (အကြောင်းအရာ):</label><br>
+            <textarea id="apptText" rows="3" placeholder="ဥပမာ - ဒေါက်တာပြရန်၊ ရုံးသွားရန်..." required style="width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+
+            <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px;">
+                Save Appointment Reminder
+            </button>
+            
+            <button type="button" id="unsubBtn" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                Unsubscribe / Delete All
+            </button>
+        </form>
+
         <p id="statusMsg" style="margin-top: 15px; font-weight: bold; text-align: center;"></p>
     </div>
 
     <script>
-        // Save/Register
-        document.getElementById('reminderForm').addEventListener('submit', async (e) => {
+        // Holiday Save
+        document.getElementById('holidayForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const state = document.getElementById('state').value;
-            const chatId = document.getElementById('chatId').value;
+            const chatId = document.getElementById('holidayChatId').value;
 
-            const response = await fetch('/save', {
+            const res = await fetch('/save', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ state, chatId })
             });
+            const result = await res.json();
+            document.getElementById('statusMsg').innerText = result.success ? 'Holiday Reminder Saved!' : 'Error occurred.';
+            document.getElementById('statusMsg').style.color = result.success ? 'green' : 'red';
+        });
 
-            const result = await response.json();
-            const msgEl = document.getElementById('statusMsg');
-            if(result.success) {
-                msgEl.innerText = 'Successfully connected for reminders!';
-                msgEl.style.color = 'green';
-            } else {
-                msgEl.innerText = 'An error occurred.';
-                msgEl.style.color = 'red';
-            }
+        // Appointment Save
+        document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const chatId = document.getElementById('apptChatId').value;
+            const date = document.getElementById('apptDate').value;
+            const time = document.getElementById('apptTime').value;
+            const text = document.getElementById('apptText').value;
+
+            const res = await fetch('/save_appointment', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ chatId, date, time, text })
+            });
+            const result = await res.json();
+            document.getElementById('statusMsg').innerText = result.success ? 'Appointment Reminder Saved!' : 'Error occurred.';
+            document.getElementById('statusMsg').style.color = result.success ? 'green' : 'red';
         });
 
         // Unsubscribe
         document.getElementById('unsubBtn').addEventListener('click', async () => {
-            const chatId = document.getElementById('chatId').value;
-            const msgEl = document.getElementById('statusMsg');
-
+            const chatId = document.getElementById('apptChatId').value || document.getElementById('holidayChatId').value;
             if (!chatId) {
-                msgEl.innerText = 'Please enter your Telegram Chat ID first!';
-                msgEl.style.color = 'red';
+                alert('Please enter your Telegram Chat ID first!');
                 return;
             }
-
-            const response = await fetch('/unsubscribe', {
+            const res = await fetch('/unsubscribe', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ chatId })
             });
-
-            const result = await response.json();
-            if(result.success) {
-                msgEl.innerText = 'Successfully unsubscribed from reminders.';
-                msgEl.style.color = 'orange';
-            } else {
-                msgEl.innerText = 'Failed to unsubscribe.';
-                msgEl.style.color = 'red';
-            }
+            const result = await res.json();
+            document.getElementById('statusMsg').innerText = result.success ? 'Unsubscribed successfully.' : 'Failed.';
+            document.getElementById('statusMsg').style.color = 'orange';
         });
     </script>
 </body>
