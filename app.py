@@ -7,7 +7,7 @@ import requests
 
 app = Flask(__name__)
 
-# သင်ပေးထားသော Telegram Token အမှန်
+# Telegram Token
 TOKEN = "8936278623:AAHxIYiSUQBMKlTOb2fiG2VcV20q0DT50kw"
 DB_FILE = "users.json"
 
@@ -61,10 +61,12 @@ def unsubscribe():
 
 def send_test_message(chat_id, state):
   message = (
-      f"⚠️ *Test Message:* သင့်ရဲ့ ပြည်နယ် ({state}) အတွက် ချိတ်ဆက်မှု"
-      " အောင်မြင်ပါသည်။ — 🇲🇲 အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ ဝယ်ထားဦးနော်။ /"
-      " 🇬🇧 Everything will be closed, so please buy what you need in advance."
-  )
+                f"⚠️ *မနက်ဖြန် ပိတ်ရက်ပါ! / Tomorrow is a public holiday!*\n"
+                f"🎉 *Holiday:* {holiday_name}\n\n"
+                "🇲🇲 အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ ဝယ်ထားဦးနော်။\n"
+                "🇬🇧 Everything will be closed, so please buy what you need"
+                " in advance."
+            )
   telegram_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
   response = requests.post(
       telegram_url, json={"chat_id": chat_id, "text": message, "parse_mode": "Markdown"}
