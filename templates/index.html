@@ -6,8 +6,8 @@
     <title>Germany Holiday Telegram Reminder</title>
 </head>
 <body>
-    <div style="padding: 20px; font-family: sans-serif; max-width: 600px; margin: auto;">
-        <h2>🇩🇪 Germany Public Holiday Reminder</h2>
+    <div style="padding: 20px; font-family: sans-serif; max-width: 400px; margin: auto;">
+        <h2 style="font-size: 18px; white-space: nowrap;">🇩🇪 Germany Holiday Telegram Reminder</h2>
         
         <form id="reminderForm">
             <label>Select your State:</label><br>
@@ -37,14 +37,19 @@
             <input type="text" id="chatId" placeholder="e.g. 123456789" required style="width: 100%; padding: 8px; margin: 10px 0;">
             <br>
             
-            <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <button type="submit" style="width: 100%; padding: 10px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">
                 Save Reminder
             </button>
+            
+            <button type="button" id="unsubBtn" style="width: 100%; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Unsubscribe
+            </button>
         </form>
-        <p id="statusMsg" style="margin-top: 15px; color: green;"></p>
+        <p id="statusMsg" style="margin-top: 15px; font-weight: bold;"></p>
     </div>
 
     <script>
+        // Save/Register
         document.getElementById('reminderForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const state = document.getElementById('state').value;
@@ -57,11 +62,40 @@
             });
 
             const result = await response.json();
+            const msgEl = document.getElementById('statusMsg');
             if(result.success) {
-                document.getElementById('statusMsg').innerText = 'Successfully connected!';
+                msgEl.innerText = 'Successfully connected for reminders!';
+                msgEl.style.color = 'green';
             } else {
-                document.getElementById('statusMsg').innerText = 'An error occurred.';
-                document.getElementById('statusMsg').style.color = 'red';
+                msgEl.innerText = 'An error occurred.';
+                msgEl.style.color = 'red';
+            }
+        });
+
+        // Unsubscribe
+        document.getElementById('unsubBtn').addEventListener('click', async () => {
+            const chatId = document.getElementById('chatId').value;
+            const msgEl = document.getElementById('statusMsg');
+
+            if (!chatId) {
+                msgEl.innerText = 'Please enter your Telegram Chat ID first!';
+                msgEl.style.color = 'red';
+                return;
+            }
+
+            const response = await fetch('/unsubscribe', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ chatId })
+            });
+
+            const result = await response.json();
+            if(result.success) {
+                msgEl.innerText = 'Successfully unsubscribed from reminders.';
+                msgEl.style.color = 'orange';
+            } else {
+                msgEl.innerText = 'Failed to unsubscribe.';
+                msgEl.style.color = 'red';
             }
         });
     </script>
