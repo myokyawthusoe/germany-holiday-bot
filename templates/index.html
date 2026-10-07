@@ -22,17 +22,23 @@
             transition: background 0.5s ease-in-out;
         }
         
-        /* Expanded Form Width Container */
+        /* Default Container Width (For Holiday Tab - 480px) */
         .container { 
             width: 100%; 
-            max-width: 540px; 
+            max-width: 480px; 
             background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px); 
             border-radius: 16px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             overflow: hidden; 
-            padding: 30px; 
+            padding: 25px; 
             margin-bottom: 15px; 
+            transition: max-width 0.3s ease;
+        }
+
+        /* Expanded Container Width specifically for Appointment Tab (620px) */
+        .container.appointment-expanded {
+            max-width: 620px;
         }
         
         .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -112,7 +118,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <div class="header-box">
             <h2 id="uiTitle">✨ Smart Reminder Portal</h2>
             <!-- Compact Language Flag Dropdown -->
@@ -330,6 +336,7 @@
         function switchTab(tabName) {
             const holidaySec = document.getElementById('holidaySection');
             const apptSec = document.getElementById('appointmentSection');
+            const container = document.getElementById('mainContainer');
             const buttons = document.querySelectorAll('.tab-btn');
             
             document.getElementById('statusMsg').innerText = '';
@@ -337,6 +344,7 @@
             if (tabName === 'holiday') {
                 holidaySec.classList.add('active');
                 apptSec.classList.remove('active');
+                container.classList.remove('appointment-expanded'); // Holiday width (480px)
                 buttons[0].classList.add('active');
                 buttons[1].classList.remove('active');
                 document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/static/holiday_background.jpg') no-repeat center center fixed";
@@ -344,6 +352,7 @@
             } else {
                 apptSec.classList.add('active');
                 holidaySec.classList.remove('active');
+                container.classList.add('appointment-expanded'); // Appointment expanded width (620px)
                 buttons[1].classList.add('active');
                 buttons[0].classList.remove('active');
                 document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/static/appointment_background.jpg') no-repeat center center fixed";
