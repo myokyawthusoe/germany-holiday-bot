@@ -28,55 +28,32 @@
         }
         .lang-select:focus { border-color: #0066cc; box-shadow: 0 0 0 2px rgba(0,102,204,0.1); }
 
-        /* Animated Notice Card Styling */
-        .notice-card {
+        /* Animated Marquee Banner Styling */
+        .marquee-container {
             background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
             border: 1px solid #b2f5ea;
             border-radius: 10px;
-            padding: 12px 15px;
+            padding: 10px 0;
             margin-bottom: 20px;
-            font-size: 13px;
-            color: #2c5282;
-            line-height: 1.5;
-            position: relative;
             overflow: hidden;
-            animation: pulseGlow 3s infinite alternate, slideInDown 0.6s ease;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.08);
+            white-space: nowrap;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.06);
         }
 
-        .notice-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: #319795;
-            animation: colorShift 5s infinite alternate;
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 14s linear infinite;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2b6cb0;
         }
 
-        @keyframes slideInDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 4px 12px rgba(49, 151, 149, 0.1); }
-            100% { box-shadow: 0 4px 18px rgba(49, 151, 149, 0.25); }
-        }
-
-        @keyframes colorShift {
-            0% { background: #319795; }
-            50% { background: #3182ce; }
-            100% { background: #2b6cb0; }
-        }
-
-        .notice-title {
-            font-weight: 700;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        /* Marquee Animation (Right to Left / Left to Right check) */
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
         }
 
         /* Tab Switcher Styling */
@@ -120,15 +97,6 @@
                 <option value="my" selected>🇲🇲 MM</option>
             </select>
         </div>
-
-        <!-- Animated Notice Card -->
-        <div class="notice-card" id="noticeCardBox">
-            <div class="notice-title" id="noticeTitle">🔔 အကြောင်းကြားမည့် အချိန်ဇယား</div>
-            <div id="noticeDesc">
-                • <b>Holiday:</b> ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် ပို့ပါမည်။<br>
-                • <b>Appointment:</b> ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် ပို့ပါမည်။
-            </div>
-        </div>
         
         <!-- Tab Navigation Buttons -->
         <div class="tab-container">
@@ -138,6 +106,13 @@
 
         <!-- 1. Holiday Reminder Form -->
         <div id="holidaySection" class="form-section active">
+            <!-- Animated Marquee for Holiday -->
+            <div class="marquee-container">
+                <div class="marquee-text" id="holidayMarqueeText">
+                    🔔 ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် Telegram မှ ပေးပို့ပါမည်။
+                </div>
+            </div>
+
             <form id="holidayForm">
                 <label id="lblState">ဂျာမနီပြည်နယ် ရွေးရန် (Select State):</label>
                 <select id="state" required>
@@ -173,6 +148,13 @@
 
         <!-- 2. Appointment Reminder Form -->
         <div id="appointmentSection" class="form-section">
+            <!-- Animated Marquee for Appointment -->
+            <div class="marquee-container">
+                <div class="marquee-text" id="apptMarqueeText">
+                    🔔 ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် Telegram မှ ပေးပို့ပါမည်။
+                </div>
+            </div>
+
             <form id="appointmentForm">
                 <label>Telegram Chat ID:</label>
                 <div class="info-box" id="infoApptChatId">
@@ -217,8 +199,8 @@
         const translations = {
             en: {
                 uiTitle: "✨ Smart Reminder Hub",
-                noticeTitle: "🔔 Notification Schedule",
-                noticeDesc: "• <b>Holiday:</b> Sent 1 day before at 4:00 PM (16:00).<br>• <b>Appointment:</b> Sent 1 day before at 9:00 AM (09:00).",
+                holidayMarquee: "🔔 Holiday notification will be sent via Telegram 1 day before at 4:00 PM (16:00).",
+                apptMarquee: "🔔 Appointment notification will be sent via Telegram 1 day before at 9:00 AM (09:00).",
                 tabHoliday: "🇩🇪 Holiday",
                 tabAppt: "📅 Appointment",
                 lblState: "Select your German State:",
@@ -241,8 +223,8 @@
             },
             de: {
                 uiTitle: "✨ Smart Reminder Hub",
-                noticeTitle: "🔔 Benachrichtigungsplan",
-                noticeDesc: "• <b>Feiertag:</b> 1 Tag vorher um 16:00 Uhr gesendet.<br>• <b>Termin:</b> 1 Tag vorher um 09:00 Uhr gesendet.",
+                holidayMarquee: "🔔 Die Feiertagsbenachrichtigung wird 1 Tag vorher um 16:00 Uhr über Telegram gesendet.",
+                apptMarquee: "🔔 Die Terminbenachrichtigung wird 1 Tag vorher um 09:00 Uhr über Telegram gesendet.",
                 tabHoliday: "🇩🇪 Feiertage",
                 tabAppt: "📅 Termine",
                 lblState: "Bundesland auswählen:",
@@ -265,133 +247,12 @@
             },
             my: {
                 uiTitle: "✨ Smart Reminder Hub",
-                noticeTitle: "🔔 အကြောင်းကြားမည့် အချိန်ဇယား",
-                noticeDesc: "• <b>Holiday:</b> ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် ပို့ပါမည်။<br>• <b>Appointment:</b> ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် ပို့ပါမည်။",
+                holidayMarquee: "🔔 ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
+                apptMarquee: "🔔 ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
                 tabHoliday: "🇩🇪 ပိတ်ရက် (Holiday)",
                 tabAppt: "📅 ချိန်းဆိုချက် (Appointment)",
                 lblState: "ဂျာမနီပြည်နယ် ရွေးရန် (Select State):",
                 optChooseState: "-- ပြည်နယ် ရွေးပါ --",
                 infoChatId: "📌 <b>Chat ID ရှာရန်:</b> Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော ဂဏန်းနံပါတ်ကို ထည့်ပါ။",
                 infoApptChatId: "📌 Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော ဂဏန်းနံပါတ်ကို ထည့်ပါ။",
-                lblApptDate: "ချိန်းဆိုသည့်ရက် (Date):",
-                lblApptTime: "ချိန်းဆိုသည့် အချိန် (Time - 24H):",
-                optChooseTime: "-- အချိန် ရွေးချယ်ပါ --",
-                lblApptText: "ချိန်းဆိုချက် အသေးစိတ် (Details):",
-                apptPlaceholder: "ဥပမာ - ဒေါက်တာပြရန်၊ အစိုးရရုံးသွားရန်၊ အင်တာဗျူးသွားရန် ...",
-                btnSaveHoliday: "ပိတ်ရက် သတိပေးချက် သိမ်းမည်",
-                btnSaveAppt: "ချိန်းဆိုချက် သိမ်းမည်",
-                btnUnsub: "အကြောင်းကြားချက် ပိတ်မည် (Unsubscribe)",
-                successHoliday: "🎉 Holiday Reminder Saved Successfully!",
-                successAppt: "📅 Appointment Reminder Saved Successfully!",
-                successUnsub: "Successfully unsubscribed (Notifications stopped).",
-                errChatId: "ကျေးဇူးပြု၍ Telegram Chat ID ထည့်ပါ!",
-                errGeneral: "အမှားအယွင်း ရှိနေပါသည်။"
-            }
-        };
-
-        let currentLang = 'my';
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-
-            document.getElementById('uiTitle').innerHTML = t.uiTitle;
-            document.getElementById('noticeTitle').innerHTML = t.noticeTitle;
-            document.getElementById('noticeDesc').innerHTML = t.noticeDesc;
-            document.getElementById('tabHoliday').innerText = t.tabHoliday;
-            document.getElementById('tabAppt').innerText = t.tabAppt;
-            document.getElementById('lblState').innerText = t.lblState;
-            document.getElementById('optChooseState').innerText = t.optChooseState;
-            document.getElementById('infoChatId').innerHTML = t.infoChatId;
-            document.getElementById('infoApptChatId').innerHTML = t.infoApptChatId;
-            document.getElementById('lblApptDate').innerText = t.lblApptDate;
-            document.getElementById('lblApptTime').innerText = t.lblApptTime;
-            document.getElementById('optChooseTime').innerText = t.optChooseTime;
-            document.getElementById('lblApptText').innerText = t.lblApptText;
-            document.getElementById('apptText').placeholder = t.apptPlaceholder;
-            document.getElementById('btnSaveHoliday').innerText = t.btnSaveHoliday;
-            document.getElementById('btnSaveAppt').innerText = t.btnSaveAppt;
-            document.getElementById('btnUnsub1').innerText = t.btnUnsub;
-            document.getElementById('btnUnsub2').innerText = t.btnUnsub;
-        }
-
-        window.onload = () => {
-            changeLanguage('my');
-        };
-
-        function switchTab(tabName) {
-            const holidaySec = document.getElementById('holidaySection');
-            const apptSec = document.getElementById('appointmentSection');
-            const buttons = document.querySelectorAll('.tab-btn');
-            
-            document.getElementById('statusMsg').innerText = '';
-
-            if (tabName === 'holiday') {
-                holidaySec.classList.add('active');
-                apptSec.classList.remove('active');
-                buttons[0].classList.add('active');
-                buttons[1].classList.remove('active');
-            } else {
-                apptSec.classList.add('active');
-                holidaySec.classList.remove('active');
-                buttons[1].classList.add('active');
-                buttons[0].classList.remove('active');
-            }
-        }
-
-        document.getElementById('holidayForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const state = document.getElementById('state').value;
-            const chatId = document.getElementById('chatId').value;
-
-            const res = await fetch('/save', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ state, chatId })
-            });
-            const result = await res.json();
-            const t = translations[currentLang];
-            showStatus(result.success ? t.successHoliday : t.errGeneral, result.success);
-        });
-
-        document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const chatId = document.getElementById('apptChatId').value;
-            const date = document.getElementById('apptDate').value;
-            const time = document.getElementById('apptTime').value;
-            const text = document.getElementById('apptText').value;
-
-            const res = await fetch('/save_appointment', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ chatId, date, time, text })
-            });
-            const result = await res.json();
-            const t = translations[currentLang];
-            showStatus(result.success ? t.successAppt : t.errGeneral, result.success);
-        });
-
-        async function unsubscribeUser() {
-            const chatId = document.getElementById('chatId').value || document.getElementById('apptChatId').value;
-            const t = translations[currentLang];
-            if (!chatId) {
-                showStatus(t.errChatId, false);
-                return;
-            }
-            const res = await fetch('/unsubscribe', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ chatId })
-            });
-            const result = await res.json();
-            showStatus(result.success ? t.successUnsub : t.errGeneral, !result.success);
-        }
-
-        function showStatus(msg, success) {
-            const msgEl = document.getElementById('statusMsg');
-            msgEl.innerText = msg;
-            msgEl.style.color = success ? '#2f855a' : '#e53e3e';
-        }
-    </script>
-</body>
-</html>
+                lblApptDate: "ချိန်းဆိုသည့်ရက် (Date
