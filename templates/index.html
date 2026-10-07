@@ -14,7 +14,7 @@
         .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         h2 { color: #1a1a1a; font-size: 20px; font-weight: 700; }
         
-        /* Compact Language Flag Dropdown Styling */
+        /* Compact Language Flag Dropdown */
         .lang-select { 
             width: auto !important; 
             padding: 4px 8px !important; 
@@ -27,6 +27,57 @@
             outline: none; 
         }
         .lang-select:focus { border-color: #0066cc; box-shadow: 0 0 0 2px rgba(0,102,204,0.1); }
+
+        /* Animated Notice Card Styling */
+        .notice-card {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border: 1px solid #b2f5ea;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #2c5282;
+            line-height: 1.5;
+            position: relative;
+            overflow: hidden;
+            animation: pulseGlow 3s infinite alternate, slideInDown 0.6s ease;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.08);
+        }
+
+        .notice-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #319795;
+            animation: colorShift 5s infinite alternate;
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 4px 12px rgba(49, 151, 149, 0.1); }
+            100% { box-shadow: 0 4px 18px rgba(49, 151, 149, 0.25); }
+        }
+
+        @keyframes colorShift {
+            0% { background: #319795; }
+            50% { background: #3182ce; }
+            100% { background: #2b6cb0; }
+        }
+
+        .notice-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         /* Tab Switcher Styling */
         .tab-container { display: flex; background: #edf2f7; border-radius: 10px; padding: 4px; margin-bottom: 25px; }
@@ -68,6 +119,15 @@
                 <option value="de">🇩🇪 DE</option>
                 <option value="my" selected>🇲🇲 MM</option>
             </select>
+        </div>
+
+        <!-- Animated Notice Card -->
+        <div class="notice-card" id="noticeCardBox">
+            <div class="notice-title" id="noticeTitle">🔔 အကြောင်းကြားမည့် အချိန်ဇယား</div>
+            <div id="noticeDesc">
+                • <b>Holiday:</b> ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် ပို့ပါမည်။<br>
+                • <b>Appointment:</b> ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် ပို့ပါမည်။
+            </div>
         </div>
         
         <!-- Tab Navigation Buttons -->
@@ -157,6 +217,8 @@
         const translations = {
             en: {
                 uiTitle: "✨ Smart Reminder Hub",
+                noticeTitle: "🔔 Notification Schedule",
+                noticeDesc: "• <b>Holiday:</b> Sent 1 day before at 4:00 PM (16:00).<br>• <b>Appointment:</b> Sent 1 day before at 9:00 AM (09:00).",
                 tabHoliday: "🇩🇪 Holiday",
                 tabAppt: "📅 Appointment",
                 lblState: "Select your German State:",
@@ -179,6 +241,8 @@
             },
             de: {
                 uiTitle: "✨ Smart Reminder Hub",
+                noticeTitle: "🔔 Benachrichtigungsplan",
+                noticeDesc: "• <b>Feiertag:</b> 1 Tag vorher um 16:00 Uhr gesendet.<br>• <b>Termin:</b> 1 Tag vorher um 09:00 Uhr gesendet.",
                 tabHoliday: "🇩🇪 Feiertage",
                 tabAppt: "📅 Termine",
                 lblState: "Bundesland auswählen:",
@@ -201,6 +265,8 @@
             },
             my: {
                 uiTitle: "✨ Smart Reminder Hub",
+                noticeTitle: "🔔 အကြောင်းကြားမည့် အချိန်ဇယား",
+                noticeDesc: "• <b>Holiday:</b> ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် ပို့ပါမည်။<br>• <b>Appointment:</b> ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် ပို့ပါမည်။",
                 tabHoliday: "🇩🇪 ပိတ်ရက် (Holiday)",
                 tabAppt: "📅 ချိန်းဆိုချက် (Appointment)",
                 lblState: "ဂျာမနီပြည်နယ် ရွေးရန် (Select State):",
@@ -209,7 +275,7 @@
                 infoApptChatId: "📌 Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော ဂဏန်းနံပါတ်ကို ထည့်ပါ။",
                 lblApptDate: "ချိန်းဆိုသည့်ရက် (Date):",
                 lblApptTime: "ချိန်းဆိုသည့် အချိန် (Time - 24H):",
-                optChooseTime: "-- အချိန် ရွေးပါ --",
+                optChooseTime: "-- အချိန် ရွေးချယ်ပါ --",
                 lblApptText: "ချိန်းဆိုချက် အသေးစိတ် (Details):",
                 apptPlaceholder: "ဥပမာ - ဒေါက်တာပြရန်၊ အစိုးရရုံးသွားရန်၊ အင်တာဗျူးသွားရန် ...",
                 btnSaveHoliday: "ပိတ်ရက် သတိပေးချက် သိမ်းမည်",
@@ -230,6 +296,8 @@
             const t = translations[lang];
 
             document.getElementById('uiTitle').innerHTML = t.uiTitle;
+            document.getElementById('noticeTitle').innerHTML = t.noticeTitle;
+            document.getElementById('noticeDesc').innerHTML = t.noticeDesc;
             document.getElementById('tabHoliday').innerText = t.tabHoliday;
             document.getElementById('tabAppt').innerText = t.tabAppt;
             document.getElementById('lblState').innerText = t.lblState;
@@ -291,7 +359,7 @@
             const chatId = document.getElementById('apptChatId').value;
             const date = document.getElementById('apptDate').value;
             const time = document.getElementById('apptTime').value;
-            const text = document.getElementById('apptText' ).value;
+            const text = document.getElementById('apptText').value;
 
             const res = await fetch('/save_appointment', {
                 method: 'POST',
