@@ -22,7 +22,7 @@
             transition: background 0.5s ease-in-out;
         }
         
-        /* Container Width for Holiday Tab (Expanded to 540px) */
+        /* Container Width for Holiday Tab (540px) */
         .container { 
             width: 100%; 
             max-width: 540px; 
@@ -33,12 +33,13 @@
             overflow: hidden; 
             padding: 30px; 
             margin-bottom: 15px; 
-            transition: max-width 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        /* Expanded Container Width specifically for Appointment Tab (620px) */
+        /* Expanded Width specifically for Appointment Tab (Right Side Shifted & Expanded to 650px) */
         .container.appointment-expanded {
-            max-width: 620px;
+            max-width: 650px;
+            transform: translateX(12px); /* ဘယ်ဘက်ကို မထိဘဲ ညာဘက်သို့ နည်းနည်းတိုးထွက်စေရန် */
         }
         
         .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -344,7 +345,7 @@
             if (tabName === 'holiday') {
                 holidaySec.classList.add('active');
                 apptSec.classList.remove('active');
-                container.classList.remove('appointment-expanded'); // Holiday expanded width (540px)
+                container.classList.remove('appointment-expanded'); 
                 buttons[0].classList.add('active');
                 buttons[1].classList.remove('active');
                 document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/static/holiday_background.jpg') no-repeat center center fixed";
@@ -352,7 +353,7 @@
             } else {
                 apptSec.classList.add('active');
                 holidaySec.classList.remove('active');
-                container.classList.add('appointment-expanded'); // Appointment expanded width (620px)
+                container.classList.add('appointment-expanded'); 
                 buttons[1].classList.add('active');
                 buttons[0].classList.remove('active');
                 document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/static/appointment_background.jpg') no-repeat center center fixed";
