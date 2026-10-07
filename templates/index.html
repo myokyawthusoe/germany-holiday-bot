@@ -22,16 +22,16 @@
             transition: background 0.5s ease-in-out;
         }
         
-        /* Default Container Width (For Holiday Tab - 480px) */
+        /* Container Width for Holiday Tab (Expanded to 540px) */
         .container { 
             width: 100%; 
-            max-width: 480px; 
+            max-width: 540px; 
             background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px); 
             border-radius: 16px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             overflow: hidden; 
-            padding: 25px; 
+            padding: 30px; 
             margin-bottom: 15px; 
             transition: max-width 0.3s ease;
         }
@@ -344,7 +344,7 @@
             if (tabName === 'holiday') {
                 holidaySec.classList.add('active');
                 apptSec.classList.remove('active');
-                container.classList.remove('appointment-expanded'); // Holiday width (480px)
+                container.classList.remove('appointment-expanded'); // Holiday expanded width (540px)
                 buttons[0].classList.add('active');
                 buttons[1].classList.remove('active');
                 document.body.style.background = "linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/static/holiday_background.jpg') no-repeat center center fixed";
