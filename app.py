@@ -11,12 +11,12 @@ TOKEN = "8936278623:AAHxIYiSUQBMKlTOb2fiG2VcV20q0DT50kw"
 DB_NAME = "reminder_bot.db"
 
 
-# --- Database ကို တည်ဆောက်ခြင်း ---
+# --- Database ကို တည်ဆောက်ခြင်း (Tables ဖန်တီးခြင်း) ---
 def init_db():
   conn = sqlite3.connect(DB_NAME)
   cursor = conn.cursor()
 
-  # 1. Holiday Users Table (status က active သို့မဟုတ် inactive ဖြစ်မည်)
+  # 1. Holiday Users Table
   cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             chat_id TEXT PRIMARY KEY,
@@ -25,7 +25,7 @@ def init_db():
         )
     """)
 
-  # 2. Appointments Table (status က active သို့မဟုတ် inactive ဖြစ်မည်)
+  # 2. Appointments Table
   cursor.execute("""
         CREATE TABLE IF NOT EXISTS appointments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +37,7 @@ def init_db():
         )
     """)
 
-  # 3. Activity Logs Table
+  # 3. Activity Logs / Transactions Table
   cursor.execute("""
         CREATE TABLE IF NOT EXISTS activity_logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,9 +52,11 @@ def init_db():
   conn.close()
 
 
+# Server စတတ်တာနဲ့ DB တည်ဆောက်မည်
 init_db()
 
 
+# --- Database Helper Function (Activity Logging) ---
 def log_activity(action_type, chat_id, details):
   conn = sqlite3.connect(DB_NAME)
   cursor = conn.cursor()
@@ -93,6 +95,7 @@ def save():
   conn.commit()
   conn.close()
 
+  # Transaction Log မှတ်မည်
   log_activity("HOLIDAY_SAVE", chat_id, {"state": state})
   return jsonify({"success": True})
 
@@ -118,6 +121,7 @@ def save_appointment():
   conn.commit()
   conn.close()
 
+  # Transaction Log မှတ်မည်
   log_activity(
       "APPOINTMENT_SAVE",
       chat_id,
@@ -145,11 +149,45 @@ def unsubscribe():
     conn.commit()
     conn.close()
 
-    # Log မှတ်မည်
+    # Transaction Log မှတ်မည်
     log_activity("UNSUBSCRIBE", chat_id, {"status": "set to inactive"})
     return jsonify({"success": True})
 
   return jsonify({"success": False})
+
+
+# --- Admin View Route: Browser မှတစ်ဆင့် DB Records များကို ကြည့်ရန် ---
+@app.route("/admin/view-db")
+def view_db():
+  conn = sqlite3.connect(DB_NAME)
+  cursor = conn.cursor()
+
+  cursor.execute("SELECT * FROM users")
+  users = cursor.fetchall()
+
+  cursor.execute("SELECT * FROM appointments")
+  appointments = cursor.fetchall()
+
+  cursor.execute("SELECT * FROM activity_logs ORDER BY id DESC LIMIT 50")
+  logs = cursor.fetchall()
+
+  conn.close()
+
+  html = f"""
+    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto;">
+        <h2>📊 Smart Reminder Hub - Database Records</h2>
+        <hr>
+        <h3>1. Users (Holidays)</h3>
+        <p style="background: #f4f4f4; padding: 10px; border-radius: 5px;">{users}</p>
+        
+        <h3>2. Appointments</h3>
+        <p style="background: #f4f4f4; padding: 10px; border-radius: 5px;">{appointments}</p>
+        
+        <h3>3. Recent Activity Logs (Transactions)</h3>
+        <p style="background: #f4f4f4; padding: 10px; border-radius: 5px;">{logs}</p>
+    </div>
+    """
+  return html
 
 
 # --- 1) နေ့စဉ် ညနေ ၄ နာရီ Holiday Check (status active များကိုသာ ပို့မည်) ---
@@ -225,12 +263,13 @@ def check_appointments_and_notify():
         json={"chat_id": chat_id, "text": message, "parse_mode": "Markdown"},
     )
 
-  # ပို့ပြီးသား (သို့မဟုတ် သက်တမ်းကုန်သွားတဲ့) appointment များကို ဖယ်ရှားမည်
+  # ပို့ပြီးသား appointment များကို ဖယ်ရှားမည်
   cursor.execute("DELETE FROM appointments WHERE date = ?", (tomorrow_str,))
   conn.commit()
   conn.close()
 
 
+# Scheduler Setup
 scheduler = BackgroundScheduler()
 scheduler.add_job(
     func=check_holidays_and_notify, trigger="cron", hour=16, minute=0
