@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Reminder Hub</title>
+    <title>Smart Reminder Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -12,7 +12,7 @@
         .container { width: 100%; max-width: 480px; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; padding: 25px; margin-bottom: 15px; }
         
         .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        h2 { color: #1a1a1a; font-size: 20px; font-weight: 700; }
+        h2 { color: #1a1a1a; font-size: 17px; font-weight: 700; }
         
         /* Compact Language Flag Dropdown */
         .lang-select { 
@@ -50,7 +50,6 @@
             color: #2b6cb0;
         }
 
-        /* Marquee Animation (Right to Left / Left to Right check) */
         @keyframes marquee {
             0%   { transform: translate(0, 0); }
             100% { transform: translate(-100%, 0); }
@@ -89,7 +88,7 @@
 
     <div class="container">
         <div class="header-box">
-            <h2 id="uiTitle">✨ Smart Reminder Hub</h2>
+            <h2 id="uiTitle">✨ Smart Reminder Portal Beta v1.0.8</h2>
             <!-- Compact Language Flag Dropdown -->
             <select id="langSwitch" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="en">🇬🇧 EN</option>
@@ -192,13 +191,13 @@
 
     <!-- Footer Version -->
     <div class="footer-version">
-        Smart Reminder Hub v1.0.7
+        Smart Reminder Portal Beta v1.0.8
     </div>
 
     <script>
         const translations = {
             en: {
-                uiTitle: "✨ Smart Reminder Hub",
+                uiTitle: "✨ Smart Reminder Portal Beta v1.0.8",
                 holidayMarquee: "🔔 Holiday notification will be sent via Telegram 1 day before at 4:00 PM (16:00).",
                 apptMarquee: "🔔 Appointment notification will be sent via Telegram 1 day before at 9:00 AM (09:00).",
                 tabHoliday: "🇩🇪 Holiday",
@@ -222,7 +221,7 @@
                 errGeneral: "Error occurred."
             },
             de: {
-                uiTitle: "✨ Smart Reminder Hub",
+                uiTitle: "✨ Smart Reminder Portal Beta v1.0.8",
                 holidayMarquee: "🔔 Die Feiertagsbenachrichtigung wird 1 Tag vorher um 16:00 Uhr über Telegram gesendet.",
                 apptMarquee: "🔔 Die Terminbenachrichtigung wird 1 Tag vorher um 09:00 Uhr über Telegram gesendet.",
                 tabHoliday: "🇩🇪 Feiertage",
@@ -246,7 +245,7 @@
                 errGeneral: "Ein Fehler ist aufgetreten."
             },
             my: {
-                uiTitle: "✨ Smart Reminder Hub",
+                uiTitle: "✨ Smart Reminder Portal Beta v1.0.8",
                 holidayMarquee: "🔔 ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
                 apptMarquee: "🔔 ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
                 tabHoliday: "🇩🇪 ပိတ်ရက် (Holiday)",
