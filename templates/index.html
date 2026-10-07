@@ -8,10 +8,10 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
-        /* Background Image with Dark Overlay */
+        /* Background Image with Dark Overlay (Using Flask static folder) */
         body { 
             background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), 
-                        url('https://i.ibb.co/1791338408597.jpg') no-repeat center center fixed; 
+                        url('/static/background.jpg') no-repeat center center fixed; 
             background-size: cover;
             min-height: 100vh; 
             display: flex; 
