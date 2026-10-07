@@ -230,3 +230,149 @@
                 optChooseState: "-- Bundesland wählen --",
                 infoChatId: "📌 <b>Chat ID finden:</b> Sende <code>/start</code> an <b>@userinfobot</b> auf Telegram.",
                 infoApptChatId: "📌 Sende <code>/start</code> an <b>@userinfobot</b> auf Telegram.",
+                lblApptDate: "Termindatum:",
+                lblApptTime: "Terminzeit (24-Stunden):",
+                optChooseTime: "-- Zeit wählen --",
+                lblApptText: "Termin Details:",
+                apptPlaceholder: "z.B. Arzttermin, Behördengang, Vorstellungsgespräch ...",
+                btnSaveHoliday: "Feiertags-Erinnerung speichern",
+                btnSaveAppt: "Termin-Erinnerung speichern",
+                btnUnsub: "Abbestellen (Benachrichtigungen stoppen)",
+                successHoliday: "🎉 Feiertags-Erinnerung erfolgreich gespeichert!",
+                successAppt: "📅 Termin-Erinnerung erfolgreich gespeichert!",
+                successUnsub: "Erfolgreich abbestellt (Benachrichtigungen gestoppt).",
+                errChatId: "Bitte geben Sie zuerst Ihre Telegram Chat ID ein!",
+                errGeneral: "Ein Fehler ist aufgetreten."
+            },
+            my: {
+                uiTitle: "✨ Smart Reminder Portal",
+                holidayMarquee: "🔔 ပိတ်ရက်မတိုင်ခင် ၁ ရက်အလို ညနေ ၄ နာရီ (16:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
+                apptMarquee: "🔔 ချိန်းဆိုရက်မတိုင်ခင် ၁ ရက်အလို မနက် ၉ နာရီ (09:00) တွင် Telegram မှ ပေးပို့ပါမည်။",
+                tabHoliday: "🇩🇪 ပိတ်ရက် (Holiday)",
+                tabAppt: "📅 ချိန်းဆိုချက် (Appointment)",
+                lblState: "ဂျာမနီပြည်နယ် ရွေးရန် (Select State):",
+                optChooseState: "-- ပြည်နယ် ရွေးပါ --",
+                infoChatId: "📌 <b>Chat ID ရှာရန်:</b> Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော ဂဏန်းနံပါတ်ကို ထည့်ပါ။",
+                infoApptChatId: "📌 Telegram တွင် <b>@userinfobot</b> သို့ <code>/start</code> ပို့၍ရသော ဂဏန်းနံပါတ်ကို ထည့်ပါ။",
+                lblApptDate: "ချိန်းဆိုသည့်ရက် (Date):",
+                lblApptTime: "ချိန်းဆိုသည့် အချိန် (Time - 24H):",
+                optChooseTime: "-- အချိန် ရွေးပါ --",
+                lblApptText: "ချိန်းဆိုချက် အသေးစိတ် (Details):",
+                apptPlaceholder: "ဥပမာ - ဒေါက်တာပြရန်၊ အစိုးရရုံးသွားရန်၊ အင်တာဗျူးသွားရန် ...",
+                btnSaveHoliday: "ပိတ်ရက် သတိပေးချက် သိမ်းမည်",
+                btnSaveAppt: "ချိန်းဆိုချက် သိမ်းမည်",
+                btnUnsub: "အကြောင်းကြားချက် ပိတ်မည် (Unsubscribe)",
+                successHoliday: "🎉 Holiday Reminder Saved Successfully!",
+                successAppt: "📅 Appointment Reminder Saved Successfully!",
+                successUnsub: "Successfully unsubscribed (Notifications stopped).",
+                errChatId: "ကျေးဇူးပြု၍ Telegram Chat ID ထည့်ပါ!",
+                errGeneral: "အမှားအယွင်း ရှိနေပါသည်။"
+            }
+        };
+
+        let currentLang = 'my';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.getElementById('uiTitle').innerHTML = t.uiTitle;
+            document.getElementById('holidayMarqueeText').innerText = t.holidayMarquee;
+            document.getElementById('apptMarqueeText').innerText = t.apptMarquee;
+            document.getElementById('tabHoliday').innerText = t.tabHoliday;
+            document.getElementById('tabAppt').innerText = t.tabAppt;
+            document.getElementById('lblState').innerText = t.lblState;
+            document.getElementById('optChooseState').innerText = t.optChooseState;
+            document.getElementById('infoChatId').innerHTML = t.infoChatId;
+            document.getElementById('infoApptChatId').innerHTML = t.infoApptChatId;
+            document.getElementById('lblApptDate').innerText = t.lblApptDate;
+            document.getElementById('lblApptTime').innerText = t.lblApptTime;
+            document.getElementById('optChooseTime').innerText = t.optChooseTime;
+            document.getElementById('lblApptText').innerText = t.lblApptText;
+            document.getElementById('apptText').placeholder = t.apptPlaceholder;
+            document.getElementById('btnSaveHoliday').innerText = t.btnSaveHoliday;
+            document.getElementById('btnSaveAppt').innerText = t.btnSaveAppt;
+            document.getElementById('btnUnsub1').innerText = t.btnUnsub;
+            document.getElementById('btnUnsub2').innerText = t.btnUnsub;
+        }
+
+        window.onload = () => {
+            changeLanguage('my');
+        };
+
+        function switchTab(tabName) {
+            const holidaySec = document.getElementById('holidaySection');
+            const apptSec = document.getElementById('appointmentSection');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            document.getElementById('statusMsg').innerText = '';
+
+            if (tabName === 'holiday') {
+                holidaySec.classList.add('active');
+                apptSec.classList.remove('active');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                apptSec.classList.add('active');
+                holidaySec.classList.remove('active');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+            }
+        }
+
+        document.getElementById('holidayForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const state = document.getElementById('state').value;
+            const chatId = document.getElementById('chatId').value;
+
+            const res = await fetch('/save', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ state, chatId })
+            });
+            const result = await res.json();
+            const t = translations[currentLang];
+            showStatus(result.success ? t.successHoliday : t.errGeneral, result.success);
+        });
+
+        document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const chatId = document.getElementById('apptChatId').value;
+            const date = document.getElementById('apptDate').value;
+            const time = document.getElementById('apptTime').value;
+            const text = document.getElementById('apptText').value;
+
+            const res = await fetch('/save_appointment', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ chatId, date, time, text })
+            });
+            const result = await res.json();
+            const t = translations[currentLang];
+            showStatus(result.success ? t.successAppt : t.errGeneral, result.success);
+        });
+
+        async function unsubscribeUser() {
+            const chatId = document.getElementById('chatId').value || document.getElementById('apptChatId').value;
+            const t = translations[currentLang];
+            if (!chatId) {
+                showStatus(t.errChatId, false);
+                return;
+            }
+            const res = await fetch('/unsubscribe', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ chatId })
+            });
+            const result = await res.json();
+            showStatus(result.success ? t.successUnsub : t.errGeneral, !result.success);
+        }
+
+        function showStatus(msg, success) {
+            const msgEl = document.getElementById('statusMsg');
+            msgEl.innerText = msg;
+            msgEl.style.color = success ? '#2f855a' : '#e53e3e';
+        }
+    </script>
+</body>
+</html>
