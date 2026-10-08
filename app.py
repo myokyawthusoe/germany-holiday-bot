@@ -52,11 +52,9 @@ def init_db():
     conn.close()
 
 
-# Server စတတ်တာနဲ့ DB တည်ဆောက်မည်
 init_db()
 
 
-# --- Database Helper Function (Activity Logging) ---
 def log_activity(action_type, chat_id, details):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -92,7 +90,6 @@ def save():
     conn.commit()
     conn.close()
 
-    # Transaction Log မှတ်မည်
     log_activity("HOLIDAY_SAVE", chat_id, {"state": state})
     return jsonify({"success": True})
 
@@ -117,7 +114,6 @@ def save_appointment():
     conn.commit()
     conn.close()
 
-    # Transaction Log မှတ်မည်
     log_activity(
         "APPOINTMENT_SAVE",
         chat_id,
@@ -144,18 +140,16 @@ def unsubscribe():
         conn.commit()
         conn.close()
 
-        # Transaction Log မှတ်မည်
         log_activity("UNSUBSCRIBE", chat_id, {"status": "set to inactive"})
         return jsonify({"success": True})
 
     return jsonify({"success": False})
 
 
-# --- Admin View Route: Browser မှတစ်ဆင့် DB Records များကို ကြည့်ရန် ---
 @app.route("/admin/view-db")
 def view_db():
     conn = sqlite3.connect(DB_NAME)
-    conn.row_factory = sqlite3.Row  # Column နာမည်ပါ တွဲယူရန်
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM users")
@@ -213,62 +207,30 @@ def view_db():
     return html_content
 
 
-# --- 1) နေ့စဉ် ညနေ ၄ နာရီ Holiday Check ---
 def check_holidays_and_notify():
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
-    cursor.execute("SELECT chat_id, state FROM users WHERE status = 'active'")
-    users = cursor.fetchall()
-    conn.close()
-
-    if not users:
-        return
-
-    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-    year = tomorrow.year
-    tomorrow_str = tomorrow.strftime("%Y-%m-%d")
-
-    for chat_id, state in users:
-        url = f"https://feiertage-api.de/api/?jahr={year}&land={state}"
-        try:
-            response = requests.get(url)
-            if response.status_code == 200:
-                holidays = response.json()
-                for holiday_name, data in holidays.items():
-                    if data["datum"] == tomorrow_str:
-                        message = (
-                            f"⚠️ *မနက်ဖြန် ပိတ်ရက်ပါ! / Tomorrow is a public holiday!* —"
-                            f" *Holiday:* {holiday_name} — 🇲🇲 အကုန်ပိတ်မှာဖြစ်လို့ ဝယ်စရာရှိတာ"
-                            " ဝယ်ထားဦးနော်။ / 🇬🇧 Everything will be closed, so please"
-                            " buy what you need in advance."
-                        )
-                        telegram_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-                        requests.post(
-                            telegram_url,
-                            json={
-                                "chat_id": chat_id,
-                                "text": message,
-                                "parse_mode": "Markdown",
-                            },
-                        )
-                        break
-        except Exception as e:
-            print(f"Holiday Error: {e}")
+    pass  # စမ်းသပ်မှုအတွက် ခေတ္တပိတ်ထားပါသည်
 
 
-# --- 2) မနက် ၉ နာရီ Appointment Reminder Check ---
+# --- Appointment Reminder Check (Test Mode: Every 5 Minutes) ---
 def check_appointments_and_notify():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
+    # မနက်ဖြန် ရက်စွဲကို တွက်ချက်မည် (သင်လိုချင်တဲ့ Logic အတိုင်း)
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
     tomorrow_str = tomorrow.strftime("%Y-%m-%d")
+
+    print(
+        f"--- [TEST] APPOINTMENT CHECKER RUNNING AT {datetime.datetime.now()} ---"
+    )
+    print(f"Looking for appointments on tomorrow: {tomorrow_str}")
 
     cursor.execute(
         "SELECT id, chat_id, time, text FROM appointments WHERE date = ? AND status = 'active'",
         (tomorrow_str,),
     )
     appts = cursor.fetchall()
+    print(f"Found active appointments: {appts}")
 
     for appt_id, chat_id, time_val, text_val in appts:
         message = (
@@ -280,12 +242,13 @@ def check_appointments_and_notify():
             "🇬🇧 Don't forget your appointment tomorrow."
         )
         telegram_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-        requests.post(
+        res = requests.post(
             telegram_url,
             json={"chat_id": chat_id, "text": message, "parse_mode": "Markdown"},
         )
+        print(f"Telegram API Response: {res.text}")
 
-    # ပို့ပြီးသား appointment များကို လုံးဝမဖျက်ဘဲ status = 'completed' သို့ ပြောင်းမည်
+    # ပို့ပြီးသား appointment များကို status = 'completed' သို့ ပြောင်းမည်
     cursor.execute(
         "UPDATE appointments SET status = 'completed' WHERE date = ? AND status = 'active'",
         (tomorrow_str,),
@@ -296,12 +259,16 @@ def check_appointments_and_notify():
 
 # Scheduler Setup
 scheduler = BackgroundScheduler()
+
+# မနက် ၉ နာရီ ခေတ္တ comment ပိတ်ထားသည်
+# scheduler.add_job(func=check_holidays_and_notify, trigger='cron', hour=16, minute=0)
+# scheduler.add_job(func=check_appointments_and_notify, trigger='cron', hour=9, minute=0)
+
+# 💡 စမ်းသပ်ရန်အတွက် ၅ မိနစ်တစ်ကြိမ် (interval) ဖြင့် ပြောင်းထားသည်
 scheduler.add_job(
-    func=check_holidays_and_notify, trigger="cron", hour=16, minute=0
+    func=check_appointments_and_notify, trigger="interval", minutes=5
 )
-scheduler.add_job(
-    func=check_appointments_and_notify, trigger="cron", hour=9, minute=0
-)
+
 scheduler.start()
 
 if __name__ == "__main__":
