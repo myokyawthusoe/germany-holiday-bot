@@ -13,7 +13,8 @@ TOKEN = "8936278623:AAHxIYiSUQBMKlTOb2fiG2VcV20q0DT50kw"
 
 # Supabase (PostgreSQL) Connection URL ကို Render Environment Variable (သို့မဟုတ် ဒီနေရာမှာ တိုက်ရိုက်) ထည့်ပါ
 DATABASE_URL = os.environ.get(
-     DATABASE_URL = "postgresql://postgres:D@ytervase27@db.krgtcvvpgdrwiqdyloww.supabase.co:5432/postgres"
+    "DATABASE_URL",
+    "postgresql://postgres:D@ytervase27@db.krgtcvvpgdrwiqdyloww.supabase.co:5432/postgres",
 )
 
 def get_db_connection():
